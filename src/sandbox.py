@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 #   Copyright 2025 JSulli40@Student.SCF.edu
+import sys
 
 #   COP2373 - Chapter  - Question .
 #
@@ -13,16 +14,13 @@ import sympy as sp
 #   None
 
 def  main():
-    play_sympy()
-
-    print("\nVariable List:")
-    print("globals")
-    for name, value in list(globals().items()):
-        print(f"\t{name} = {value}")
-    print("locals")
-    for name, value in list(locals().items()):
-        print(f"\t{name} = {value}")
+    print_docstrings()
 #
+
+def print_docstrings():
+
+#
+
 
 def play_sympy():
     x = sp.symbols("x")
