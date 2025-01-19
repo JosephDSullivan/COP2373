@@ -23,6 +23,9 @@ def print_docstrings():
     print(a)
     print(b)
     print(a == b)
+
+    c=2.5
+    print(int(c))
 #
 
 
