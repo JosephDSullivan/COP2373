@@ -31,76 +31,48 @@ files must also be in your repository.
 
 
 #   Constant(s)
-TICKET_COUNT = 20
-"""Total number of tickets to sell."""
-MAX_PURCHASABLE = 4
-"""Maximum number of tickets purchasable in each transaction."""
+MAX_TICKET_PER_TRANS: int = 4
+"""int: Maximum number of tickets purchasable per transaction."""
+
+MAX_TICKET_AVAIL: int = 20
+"""int: Maximum number of tickets available for entire sale."""
 
 #   Variable(s)
+ticket_remain: int = MAX_TICKET_AVAIL
+"""int: Number of tickets remaining for entire sale. """
 
-def  main():
-    import sympy
-    print(sympy.integrate.__doc__)
+
+def main():
+    pass
+
+
 #
 
-def make_sale():
-    #   Initialize variable(s).
-    global  max_ticket_per_purchase, \
-            ticket_remain_count
-    msg_input = "How many tickets would you like to purchase? "
-    #   Query user for purchase.
-    purchase_count = input(msg_input)
-    #   Verify purchase_count is numeric.
-    try:
-        purchase_count_float = float(purchase_count)
-    except ValueError:
-        print(f"Error: You did not enter a number. Sale cancelled.")
-        return 0
-    #   Verify purchase_count is an integer.
-    purchase_count = int(purchase_count)
-    if purchase_count != purchase_count_float:
-        print(f"Error: You did not enter a whole number. Sale cancelled.")
-        return 0
-    #   Verify purchase_count is positive.
-    if purchase_count < 0:
-        print(f"Error: You did not enter a positive number. Sale cancelled.")
-        return 0
-    #   Verify purchase_count is not greater than max_ticket_per_purchase.
-    if  purchase_count > max_ticket_per_purchase:
-        print(f"Error: You attempted to purchase more than the maximum")
-        print(f"tickets per person ({max_ticket_per_purchase}). Sale ")
-        print(f"cancelled.")
-        return 0
-    #   Verify purchase_count is not greater than ticket_remain_count.
-    if  purchase_count > ticket_remain_count:
-        print(f"Error: You attempted to purchase more than the total number")
-        print(f"remaining tickets ({ticket_remain_count}). Sale cancelled.")
-        print(f"tickets per person. Sale cancelled.")
-        return 0
-    #   Entry is valid. Confirm sale.
-    print(f"You have successfully purchased {purchase_count} tickets.")
-    return purchase_count
-#
-
-def validate_sale(sale_count: str):
+def validate_sale(sale_count: str) -> int:
     """
-    Validate the sale count inputted by the user based on the following rules.
-    - Input must be entered as a positive integer.
-    -
-
-
-    Rules:
-        an integer must be entered.
+    Validate the number of tickets as a positive integer and less than or
+        equal to constant MAX_TICKET_PER_TRANS and global ticket_remain.
 
     Args:
         sale_count (str): The number of tickets the user wants to buy.
 
     Returns:
-        bool: True if the input is valid, False otherwise.
+        int: Returns the number of sales indicated by parameter sale_count
+            if valid. Returns zero otherwise.
     """
-    pass
-#
+    #   Constant(s)
 
+    #   Variable(s)
+    global ticket_remain
+    #   Verify sale_count is numeric. Convert sale_count to int. On any
+    #   error, return zero.
+    try:
+        sale_count_float = float(sale_count)
+    except:
+        return 0
+
+
+#
 
 
 if __name__ == "__main__":

@@ -18,7 +18,11 @@ def  main():
 #
 
 def print_docstrings():
-
+    a = float(60.0)
+    b = int(a)
+    print(a)
+    print(b)
+    print(a == b)
 #
 
 
