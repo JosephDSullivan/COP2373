@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" JDSullivan's code solution to Chapter 1 - Assignment 1.
+""" JDSullivan's code solution to Chapter 01 - Assignment 01.
 
 Public repo: https://github.com/JosephDSullivan/COP2373/blob/main/src/chapter01/jdsullivan_chapter01_assignment01.py
 
@@ -38,10 +38,7 @@ ticket_remain: int = MAX_TICKET_AVAIL
 
 
 def main():
-
     pass
-
-
 #
 
 def validate_sale(sale_count: str) -> int:
@@ -77,11 +74,13 @@ def validate_sale(sale_count: str) -> int:
         Reimplement this function to take any type of input, including float,
         int, lists, dictionaries, tuples, etc. and output the same type with
         every data point tested if valid.
-
     """
+
     #   Constant(s)
+
     #   Variable(s)
     global ticket_remain
+
     #   Verify sale count is numeric by casting to float.
     try:
         sale_count_float = float(sale_count)
