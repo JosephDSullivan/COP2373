@@ -38,6 +38,7 @@ ticket_remain: int = MAX_TICKET_AVAIL
 
 
 def main():
+
     pass
 
 
@@ -48,25 +49,31 @@ def validate_sale(sale_count: str) -> int:
     Validate the number of tickets as a positive integer and less than or
         equal to constant MAX_TICKET_PER_TRANS and global ticket_remain.
 
-    >>> validate_sale("5")
-    5
-
-    >>> validate_sale("7.0")
-    7
-
-    >>> validate_sale("3.9")
-    -1
-
-    >>> validate_sale("a")
-    -1
-
     Args:
         sale_count (str): The number of tickets the user wants to buy.
 
     Returns:
         int: Returns the number of sales if valid. Returns -1 otherwise.
 
-    TODO:
+    >>> validate_sale("2")
+    2
+
+    >>> validate_sale("3.0")
+    3
+
+    >>> validate_sale("0")
+    0
+
+    >>> print(validate_sale("-3"))
+    -1
+
+    >>> print(validate_sale("2.9"))
+    -1
+
+    >>> validate_sale("a")
+    -1
+
+    Todo:
         Reimplement this function to take any type of input, including float,
         int, lists, dictionaries, tuples, etc. and output the same type with
         every data point tested if valid.
@@ -93,8 +100,6 @@ def validate_sale(sale_count: str) -> int:
         return -1
     #   Sale count is valid. Return it.
     return sale_count_int
-
-
 #
 
 
