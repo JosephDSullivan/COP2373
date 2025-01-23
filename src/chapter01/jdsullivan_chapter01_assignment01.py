@@ -23,83 +23,97 @@ Problem description:
 """
 
 #   Import(s)
-
+import datetime as dt
 
 #   Constant(s)
-MAX_TICKET_PER_TRANS: int = 4
-"""int: Maximum number of tickets purchasable per transaction."""
-
 MAX_TICKET_AVAIL: int = 20
 """int: Maximum number of tickets available for entire sale."""
 
-#   Variable(s)
-ticket_remain: int = MAX_TICKET_AVAIL
-"""int: Number of tickets remaining for entire sale. """
+MAX_TICKET_PER_TRANS: int = 4
+"""int: Maximum number of tickets purchasable per transaction."""
 
+#   Variable(s)
 
 def main():
-    pass
-#
+    """"""
+    #   Entry function for when code is invoked directly.
+    #   tbd
+    print(get_trans(400))
 
-def validate_sale(sale_count: str) -> int:
+def get_sale(total_ticket_avail: int, max_per_trans: int) -> tuple():
+
+def get_trans(max_per_trans: int
+              ) -> int:
     """
-    Validate the number of tickets as a positive integer and less than or
-        equal to constant MAX_TICKET_PER_TRANS and global ticket_remain.
+    Get transaction input from the user and validate it.
 
     Args:
-        sale_count (str): The number of tickets the user wants to buy.
+        max_per_trans (int): Maximum number per transaction.
 
     Returns:
-        int: Returns the number of sales if valid. Returns -1 otherwise.
-
-    >>> validate_sale("2")
-    2
-
-    >>> validate_sale("3.0")
-    3
-
-    >>> validate_sale("0")
-    0
-
-    >>> print(validate_sale("-3"))
-    -1
-
-    >>> print(validate_sale("2.9"))
-    -1
-
-    >>> validate_sale("a")
-    -1
-
-    Todo:
-        Reimplement this function to take any type of input, including float,
-        int, lists, dictionaries, tuples, etc. and output the same type with
-        every data point tested if valid.
+        int: Validated transaction count
     """
+    #   Message text used to prompt user for transaction.
+    msg = (f"How many tickets would you like to purchase (maximum of "
+           f"{max_per_trans})?\t")
+    #   Boolean to store if input is valid.
+    is_trans_valid = False
 
-    #   Constant(s)
+    #   Loop until transaction is valid.
+    while not is_trans_valid:
+        #   Get transaction from user input.
+        input_trans = input(msg)
+        #   Validate the input.
+        is_trans_valid = validate_trans(input_trans, max_per_trans)
 
-    #   Variable(s)
-    global ticket_remain
+    #   Return transaction.
+    return int(input_trans)
 
-    #   Verify sale count is numeric by casting to float.
+
+def validate_trans(trans: str,
+                   max_per_trans: int,
+                   show_warning: bool = True
+                   ) -> bool:
+    """
+    Validate the provided transaction. It should be a nonnegative integer and
+        less than or equal to max_per_trans.
+
+    Args:
+        trans (str): The transaction to validate.
+        max_per_trans (int): Maximum number per transaction.
+        show_warning (bool, optional): If True, show warnings when validation
+            fails. Defaults to True.
+
+    Returns:
+        bool: True if the transaction is valid, False otherwise.
+
+    """
+    #   Attempt to convert transaction to integer.
     try:
-        sale_count_float = float(sale_count)
-    except:
-        return -1
-    #   Verify sale count is integer by casting and comparing to float. Note:
-    #   this feels janky - I hope there is another way. This will allow a
-    #   whole number written as a decimal to be valid.
-    sale_count_int = int(sale_count_float)
-    if sale_count_int != sale_count_float:
-        return -1
-    #   Verify sale count is not negative and less than or equal to both
-    #   MAX_TICKET_PER_TRANS and ticket_remain.
-    if sale_count_int < 0 or sale_count_int > MAX_TICKET_PER_TRANS or \
-            sale_count_int > ticket_remain:
-        return -1
-    #   Sale count is valid. Return it.
-    return sale_count_int
-#
+        trans_int = int(trans)
+    #   Validation has failed.
+    except ValueError:
+        if show_warning:
+            msg = (f"\tWARNING:\tUnable to convert string \"{trans}\" to an "
+                   f"integer.")
+            print(msg)
+        return False
+    #   If transaction is negative, validation has failed.
+    if trans_int < 0:
+        if show_warning:
+            msg = f"\tWARNING:\t{trans_int} is not a positive integer."
+            print(msg)
+        return False
+    #   If transaction is larger than the maximum per transaction, validation
+    #   has failed.
+    if trans_int > max_per_trans:
+        if show_warning:
+            msg = (f"\tWARNING:\t{trans_int} is larger than the maximum "
+                   f"allowed per transaction ({max_per_trans}).")
+            print(msg)
+        return False
+    #   Validation has succeeded.
+    return True
 
 
 if __name__ == "__main__":
@@ -108,4 +122,3 @@ if __name__ == "__main__":
 else:
     #   Execute this code when imported.
     pass
-#
