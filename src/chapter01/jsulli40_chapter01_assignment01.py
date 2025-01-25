@@ -14,7 +14,7 @@ Assignment
     01
 
 Repository
-    https://github.com/JosephDSullivan/COP2373/blob/main/src/chapter01/jdsullivan_chapter01_assignment01.py
+    https://github.com/JosephDSullivan/COP2373/blob/main/src/chapter01/jsulli40_chapter01_assignment01.py
 
 Problem Description
     Write an application to pre-sell a limited number of cinema tickets. Each
