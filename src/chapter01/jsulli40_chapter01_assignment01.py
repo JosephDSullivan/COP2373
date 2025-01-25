@@ -2,7 +2,7 @@
 """ This program is designed to pre-sell a limited number of cinema tickets.
 
 Author
-    JDSullivan <JSulli40@Student.SCF.edu>
+    Joseph D Sullivan <JSulli40@Student.SCF.edu>
 
 Date
     January 24, 2025
