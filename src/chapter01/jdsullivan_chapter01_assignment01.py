@@ -1,5 +1,21 @@
 #!/usr/bin/env python3
-""" JDSullivan's code solution to Chapter 01 - Assignment 01.
+""" This program is designed to pre-sell a limited number of cinema tickets.
+
+Author
+Joseph D. Sullivan <JSulli40@Student.SCF.edu>
+
+Date
+January 24, 2025
+
+Chapter
+01
+
+Assignment
+01
+
+Repository
+https://github.com/JosephDSullivan/COP2373/blob/main/src/chapter01/jdsullivan_chapter01_assignment01.py
+
 
 Public repo: https://github.com/JosephDSullivan/COP2373/blob/main/src/chapter01/jdsullivan_chapter01_assignment01.py
 
