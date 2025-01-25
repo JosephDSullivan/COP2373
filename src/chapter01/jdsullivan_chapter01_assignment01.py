@@ -2,24 +2,21 @@
 """ This program is designed to pre-sell a limited number of cinema tickets.
 
 Author
-Joseph D. Sullivan <JSulli40@Student.SCF.edu>
+    JDSullivan <JSulli40@Student.SCF.edu>
 
 Date
-January 24, 2025
+    January 24, 2025
 
 Chapter
-01
+    01
 
 Assignment
-01
+    01
 
 Repository
-https://github.com/JosephDSullivan/COP2373/blob/main/src/chapter01/jdsullivan_chapter01_assignment01.py
+    https://github.com/JosephDSullivan/COP2373/blob/main/src/chapter01/jdsullivan_chapter01_assignment01.py
 
-
-Public repo: https://github.com/JosephDSullivan/COP2373/blob/main/src/chapter01/jdsullivan_chapter01_assignment01.py
-
-Problem description:
+Problem Description
     Write an application to pre-sell a limited number of cinema tickets. Each
     buyer can buy up to 4 tickets. No more than 20 tickets can be sold total.
     Prompt the user for the desired number of tickets and then display the
@@ -125,6 +122,8 @@ def get_trans(max_per_trans: int
            f"{max_per_trans})? \t")
     #   Boolean to store if input is valid.
     is_trans_valid = False
+    #   String to store user input.
+    input_trans = ""
 
     #   Loop until transaction is valid.
     while not is_trans_valid:
