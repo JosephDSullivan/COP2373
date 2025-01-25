@@ -16,9 +16,14 @@ import sympy
 #   Variable(s)
 
 def main():
-    play_sympy()
-
-
+    # play_sympy()
+    num_input="3.0"
+    try:
+        float(num_input)
+    except ValueError:
+        print('Error')
+    print(float(num_input).is_integer(), "\n")
+    print(print.__doc__)
 #
 def play_sympy():
     fx = "sin(2*x)"

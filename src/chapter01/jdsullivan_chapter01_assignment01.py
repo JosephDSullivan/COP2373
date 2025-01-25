@@ -23,13 +23,13 @@ Problem description:
 """
 
 #   Import(s)
-import datetime as dt
 
 #   Constant(s)
 
 #   Variable(s)
 
-def main():
+
+def main() -> None:
     """
     Entry function for when code is invoked directly.
 
@@ -41,40 +41,29 @@ def main():
     """
     #   Run a sale of 20 total tickets with a maximum of 4 tickets per
     #   transaction.
-    sales = get_sale(20,4)
-    #   Display a table of all sale data.
-    print(f"{'Sale ID':^8}\t"
-          f"{'Sale Date / Time':^30}\t"
-          f"{'Initial':^8}\t"
-          f"{'Sold':^5}\t"
-          f"{'Remain':^7}\t")
-    for sale in sales:
-        msg_sale = (f"{sale['sale_id']:>8}\t"
-                    f"{sale['sale_dttm']:>30}\t"
-                    f"{sale['ticket_init']:>8}\t"
-                    f"{sale['ticket_sold']:>5}\t"
-                    f"{sale['ticket_remain']:>7}")
-        print(msg_sale)
+    get_sale(20, 4)
+
 
 def get_sale(total_ticket_avail: int,
              max_per_trans: int
-             ) -> tuple[dict[int,str]]:
+             ) -> None:
     """
+    Get transactions, each buying tickets, repeatedly until all tickets are
+        sold.
 
     Args:
-        total_ticket_avail:
-        max_per_trans:
+        total_ticket_avail (int): Total tickets available for this sale.
+        max_per_trans (int): Maximum number of tickets that can be sold in a
+            single transaction.
 
     Returns:
+        None
 
     """
-    #   Variable(s)
     #   Tickets remaining for this sale.
     ticket_remain = total_ticket_avail
-    #   Identifier for each sale, starting with 1.
+    #   Sale identifier.
     sale_id = 1
-    #   All sale data.
-    sale_data = []
     #   Initial text to show user at start of sale.
     msg_init = f"Welcome to the SCF Cinema Pre-Sale!\n"
     msg_init += f"Total ticket available:  {ticket_remain}\n"
@@ -83,9 +72,6 @@ def get_sale(total_ticket_avail: int,
     print(msg_init)
     #   Loop until no tickets remain.
     while ticket_remain > 0:
-        #   Store sale datetime and initial ticket count.
-        sale_dttm = dt.datetime.now()
-        ticket_init = ticket_remain
         #   Get transaction with the maximum ticket allowed as tickets
         #   remaining or maximum per transaction, whichever is lowest.
         ticket_sold = get_trans(min(ticket_remain, max_per_trans))
@@ -97,23 +83,14 @@ def get_sale(total_ticket_avail: int,
                     f"\tTickets remaining:  "
                     f"{ticket_remain:>{len(str(total_ticket_avail))}}")
         print(msg_sale)
-        #   Store sale sale.
-        sale_data.append({
-            "sale_id": sale_id,
-            "sale_dttm": sale_dttm.strftime("%Y-%m-%d %H:%M:%S.%f %Z%z"),
-            "ticket_init": ticket_init,
-            "ticket_sold": ticket_sold,
-            "ticket_remain": ticket_remain,
-        })
-        #   Iterate sale ID.
+        #   Iterate sale identifier.
         sale_id += 1
+
 
     #   Notify user at end of sale.
     msg_final = f"\nThe sale has concluded.\n"
-    msg_final += f"Total transactions:  {sale_id}\n"
+    msg_final += f"Transaction count:  {sale_id - 1}\n"
     print(msg_final)
-    #   Return sale data cast as tuple.
-    return tuple(sale_data)
 
 
 def get_trans(max_per_trans: int
@@ -125,7 +102,7 @@ def get_trans(max_per_trans: int
         max_per_trans (int): Maximum number per transaction.
 
     Returns:
-        int: Validated transaction count
+        int: Validated transaction.
     """
     #   Message text used to prompt user for transaction.
     msg = (f"How many tickets would you like to purchase (maximum of "
