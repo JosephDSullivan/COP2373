@@ -36,9 +36,15 @@ Problem Description
 """
 
 #   Import(s)
-from typing import List
+from typing import List, Tuple
 
 #   Constant(s)
+#   Maximum spam scores defining each spam likelihood category. Note that
+#   these values are inclusive.
+SPAM_MAX_SCORE_UNLIKELY: float = 1.0
+SPAM_MAX_SCORE_LOW: float = 3.0
+SPAM_MAX_SCORE_MEDIUM: float = 5.0
+SPAM_MAX_SCORE_HIGH: float = 7.0
 
 #   Variable(s)
 
@@ -78,9 +84,11 @@ P.S. We offer risk-free options with a full refund if you’re not 100% satisfie
 
 Extra Bonus!"""
     spam_phrases = get_spam_phrases()
-
-    print(get_spam_phrases())
-    print(get_spam_counts(email_message, spam_phrases))
+    spam_counts = get_spam_counts(email_message, spam_phrases)
+    spam_score = get_spam_score(spam_counts)
+    print(spam_phrases)
+    print(spam_counts)
+    print(spam_score)
     pass
 
 def get_spam_phrases() -> List[str]:
@@ -128,42 +136,79 @@ def get_spam_phrases() -> List[str]:
         "will not believe your eyes", "work from home",
         "you have been selected", "your income"
     ]
-    #   Convert each phrase explicitly into a string, trim white space, and
-    #   convert to lowercase.
+    #   Normalize spam phrases by explicitly converting into a string,
+    #   trimming white space, and converting to lowercase.
     cleaned_phrases = [str(phrase).strip().lower() for phrase in phrases]
-    #   Return list sorted alphabetically.
+    #   Return list, sorted alphabetically.
     return sorted(cleaned_phrases)
 
 
 def get_spam_counts(email_message: str,
-                    spam_phrases: list
-                   ) -> list:
+                    spam_phrases: List[str]
+                   ) -> List[Tuple[str, int]]:
     """
     Calculates counts of each spam phrase found in email message.
 
     Args:
-        email_message (str): Email message text.
-        spam_phrases (list): List of phrases to search for.
+        email_message (str): The email message text.
+        spam_phrases (list): A list of spam phrases to search for.
 
     Returns:
-        list
+        List[Tuple[str, int]]: A list of tuples where each tuple contains
+            a spam phrase and its count in the email message.
     """
     #   List containing found phrases and their count.
-    spam_phrases_found = []
-    #   Convert email message to lowercase so search is not case sensitive.
+    spam_phrases_found: List[Tuple[str, int]] = []
+
+    #   Convert email message to lowercase so search is case-insensitive.
     email_message_lower = email_message.lower()
-    #   Iterate through each spam phrase.
+    #   Iterate through each spam phrase and count occurrences in email
+    #   message.
     for spam_phrase in spam_phrases:
-        #   Convert spam_phrase to lowercase so search is not case sensitive.
-        spam_phrase_lower = spam_phrase.lower()
-        #   Determine if the spam phrase is found in the email message.
-        spam_phrase_count = email_message_lower.count(spam_phrase_lower)
-        if spam_phrase_count > 0:
-            #   Spam phrase found. Add the phrase and the number of
-            #   occurrences to the spam phrases found list.
-            spam_phrases_found.append([spam_phrase_lower, spam_phrase_count])
+        count = email_message_lower.count(spam_phrase)
+
+        if count > 0:
+            #   Spam phrase found in email message. Add the phrase and the
+            #   count of that phrase to phrases found list.
+            spam_phrases_found.append((str(spam_phrase), int(count)))
 
     return spam_phrases_found
+
+def get_spam_score(spam_counts: List[Tuple[str, int]]
+                   ) -> float:
+    """
+    Calculates spam score given a list of spam phrase counts.
+
+    Args:
+        spam_counts (List[Tuple[str, int]]): A list of tuples where each tuple
+            contains a spam phrase and its count in the email message.
+
+    Returns:
+        float: Total spam score.
+    """
+    #   Spam score for the email message.
+    spam_score = 0.0
+
+    #   Iterate through spam counts and add each count to spam score.
+    for _, count in spam_counts:
+        spam_score += count
+
+    #   Return spam score.
+    return spam_score
+
+def get_spam_likelihood_text(spam_score: float
+                        ) -> str:
+    """
+    Calculates spam likelihood text based on spam score and categories created
+    via module constants SPAM_MAX_SCORE_*.
+
+    Args:
+        spam_score (float): Spam score to calculate likelihood text for.
+
+    Returns:
+        str: Spam likelihood text.
+    """
+
 
 if __name__ == "__main__":
     #   Execute this code when invoked directly.
