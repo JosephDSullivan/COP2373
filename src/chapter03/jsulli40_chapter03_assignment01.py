@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-""" This program is to detect spam in an email text.
+"""
+This program is designed to detect spam in an email message text.
 
 Author
     Joseph D Sullivan <JSulli40@Student.SCF.edu>
@@ -32,68 +33,84 @@ Problem Description
     You must also have a technical design document (refer to the Submitting
     Assignments Module).
     Submit both your .py file and .doc/.docx file in this assignment and these
-    files must also be in your repository.
-"""
+    files must also be in your repository."""
 
-#   Import(s)
 from typing import List, Tuple
 
-#   Constant(s)
-#   Maximum spam scores defining each spam likelihood category. Note that
-#   these values are inclusive.
 SPAM_MAX_SCORE_UNLIKELY: float = 1.0
-SPAM_MAX_SCORE_LOW: float = 3.0
-SPAM_MAX_SCORE_MEDIUM: float = 5.0
-SPAM_MAX_SCORE_HIGH: float = 7.0
+"""Maximum spam score allowed for category Unlikely."""
 
-#   Variable(s)
+SPAM_MAX_SCORE_LOW: float = 3.0
+"""Maximum spam score allowed for category Low."""
+
+SPAM_MAX_SCORE_MEDIUM: float = 5.0
+"""Maximum spam score allowed for category Medium."""
+
+SPAM_MAX_SCORE_HIGH: float = 7.0
+"""Maximum spam score allowed for category High."""
 
 
 def main() -> None:
     """
     Entry function for when code is invoked directly.
 
-    Args:
-
-
     Returns:
         None
     """
-    #   tbd
-    email_message = """Dear Friend,
+    #   Get email message from user.
+    email_message = get_email_message()
 
-Congratulations! You have been selected to receive an amazing deal that you won’t want to miss. For a limited time, you can get a 100% free trial of our exclusive service – no obligation, no strings attached!
-
-✔ Guaranteed results or your money back!
-✔ Increase sales with our proven marketing solution!
-✔ Save big on your next order – don’t hesitate!
-
-But that’s not all! Sign up today and receive a cash bonus of $50 – an instant reward just for joining. This is a once in a lifetime opportunity to invest in your future and make money with ease.
-
-💰 No gimmick, no hidden costs – just free money to get you started!
-📦 Hurry! While supplies last, claim your free gift today!
-🔗 Click here to opt in and get started now!
-
-Don’t delete this email – this is your chance to grab an exclusive deal before it’s gone!
-
-Best regards,
-[Your Company Name]
-📞 Call now for more details!
-
-P.S. We offer risk-free options with a full refund if you’re not 100% satisfied. What are you waiting for? 🎁
-
-Extra Bonus!"""
+    #   Retrieve spam phrases.
     spam_phrases = get_spam_phrases()
+
+    #   Create output text to display results.
+    output = f"\nSpam Likelihood Calculation\n"
+
+    #   Retrieve spam counts for email message.
     spam_counts = get_spam_counts(email_message, spam_phrases)
+
+    #   If there is at least one item in spam counts, then add that
+    #   information to output text.
+    if len(spam_counts):
+        output += f"\n{'PHRASES':<40}{'OCCURRENCES':<20}\n"
+        output += f"{'-------':<40}{'-----------':<20}\n"
+        for spam_phrase, count in spam_counts:
+            output += f"{spam_phrase:<40}{count:>11}\n"
+        output += f"\n"
+
+    #   Calculate spam score from spam counts.
     spam_score = get_spam_score(spam_counts)
-    print(spam_phrases)
-    print(spam_counts)
-    print(spam_score)
-    pass
+
+    #   Calculate spam likelihood from spam score.
+    spam_likelihood_text = get_spam_likelihood_text(spam_score)
+
+    #   Add final score and likelihood to output text.
+    output += f"\n"
+    output += f"{'SCORE:':<15}{spam_score:<20.0f}\n"
+    output += f"{'LIKELIHOOD:':<15}{spam_likelihood_text:<20}"
+
+    #   Display output text.
+    print(output)
+
+
+def get_email_message() -> str:
+    """
+    Retrieves email message text.
+
+    Returns:
+        str: Email message text.
+    """
+    #   Create prompt message text.
+    prompt = f"\nPlease enter your email message: "
+
+    #   Retrieve email message text from user and return it.
+    email_message = input(prompt)
+    return email_message
+
 
 def get_spam_phrases() -> List[str]:
     """
-    Returns a list of phrases commonly found in spam email.
+    Retrieves words / phrases commonly found in spam email.
 
     Returns:
         List[str]: A sorted list of common spam phrases.
@@ -136,43 +153,46 @@ def get_spam_phrases() -> List[str]:
         "will not believe your eyes", "work from home",
         "you have been selected", "your income"
     ]
-    #   Normalize spam phrases by explicitly converting into a string,
-    #   trimming white space, and converting to lowercase.
+    #   Normalize each phrase by explicitly converting into a string, trimming
+    #   white space, and converting to lowercase.
     cleaned_phrases = [str(phrase).strip().lower() for phrase in phrases]
-    #   Return list, sorted alphabetically.
+    #   Return phrases, sorted alphabetically.
     return sorted(cleaned_phrases)
 
 
 def get_spam_counts(email_message: str,
                     spam_phrases: List[str]
-                   ) -> List[Tuple[str, int]]:
+                    ) -> List[Tuple[str, int]]:
     """
     Calculates counts of each spam phrase found in email message.
 
     Args:
         email_message (str): The email message text.
-        spam_phrases (list): A list of spam phrases to search for.
+        spam_phrases (List[str]): A list of spam phrases to search for.
 
     Returns:
         List[Tuple[str, int]]: A list of tuples where each tuple contains
             a spam phrase and its count in the email message.
     """
-    #   List containing found phrases and their count.
+    #   Initialize list containing spam phrases found.
     spam_phrases_found: List[Tuple[str, int]] = []
 
     #   Convert email message to lowercase so search is case-insensitive.
     email_message_lower = email_message.lower()
+
     #   Iterate through each spam phrase and count occurrences in email
     #   message.
     for spam_phrase in spam_phrases:
         count = email_message_lower.count(spam_phrase)
-
+        #   If any spam phrase is found in email message, then add that phrase
+        #   and the number of times that phrase was found in email message to
+        #   spam phrases found list.
         if count > 0:
-            #   Spam phrase found in email message. Add the phrase and the
-            #   count of that phrase to phrases found list.
             spam_phrases_found.append((str(spam_phrase), int(count)))
 
+    #   Return spam phrases found.
     return spam_phrases_found
+
 
 def get_spam_score(spam_counts: List[Tuple[str, int]]
                    ) -> float:
@@ -186,18 +206,19 @@ def get_spam_score(spam_counts: List[Tuple[str, int]]
     Returns:
         float: Total spam score.
     """
-    #   Spam score for the email message.
+    #   Initialize spam score for the email message.
     spam_score = 0.0
 
     #   Iterate through spam counts and add each count to spam score.
     for _, count in spam_counts:
-        spam_score += count
+        spam_score += float(count)
 
     #   Return spam score.
     return spam_score
 
+
 def get_spam_likelihood_text(spam_score: float
-                        ) -> str:
+                             ) -> str:
     """
     Calculates spam likelihood text based on spam score and categories created
     via module constants SPAM_MAX_SCORE_*.
@@ -207,7 +228,28 @@ def get_spam_likelihood_text(spam_score: float
 
     Returns:
         str: Spam likelihood text.
+
+    Raises:
+        ValueError: If spam score is not numeric or is less than zero.
     """
+    #   Verify spam score is numeric. If not, raise error.
+    if not isinstance(spam_score, (int, float)):
+        raise ValueError("Spam score must be a numeric value.")
+    #   Verify spam score is nonnegative. If not, raise error.
+    if spam_score < 0:
+        raise ValueError('Spam score must be greater than zero.')
+    #   Spam score is valid. Find the category based on constants and return
+    #   category name.
+    elif spam_score <= SPAM_MAX_SCORE_UNLIKELY:
+        return "Unlikely"
+    elif spam_score <= SPAM_MAX_SCORE_LOW:
+        return "Low"
+    elif spam_score <= SPAM_MAX_SCORE_MEDIUM:
+        return "Medium"
+    elif spam_score <= SPAM_MAX_SCORE_HIGH:
+        return "High"
+    else:
+        return "Extremely Likely"
 
 
 if __name__ == "__main__":
