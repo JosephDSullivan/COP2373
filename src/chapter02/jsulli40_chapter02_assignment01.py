@@ -9,13 +9,13 @@ Date
     February 7, 2025
 
 Chapter
-    03
+    02
 
 Assignment
     01
 
 Repository
-    https://github.com/JosephDSullivan/COP2373/blob/main/src/chapter03/jsulli40_chapter03_assignment01.py
+    https://github.com/JosephDSullivan/COP2373/blob/main/src/chapter02/jsulli40_chapter02_assignment01.py
 
 Problem Description
     Spam (or junk email) costs U.S. organizations billions of dollars a year
@@ -117,10 +117,10 @@ def get_spam_phrases() -> List[str]:
     """
     #   The following list was compiled from multiple sources. Please see the
     #   following files for details:
-    #       src/chapter03/source_activecampaign.com.pdf
-    #       src/chapter03/source_lix-it.com.pdf
-    #       src/chapter03/source_zerobounce.net.pdf
-    #       src/chapter03/spam_phrases.xlsx
+    #       src/chapter02/source_activecampaign.com.pdf
+    #       src/chapter02/source_lix-it.com.pdf
+    #       src/chapter02/source_zerobounce.net.pdf
+    #       src/chapter02/spam_phrases.xlsx
     phrases = [
         "free", "cash", "credit", "money", "order", "offer", "ad", "click",
         "deal", "debt", "income", "win", "100%", "bonus", "rates", "sale",
