@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Monthly expense calculations
+Collect expenses from user, calculate expense totals, and display results.
 
 Author
     Joseph D Sullivan <JSulli40@Student.SCF.edu>
@@ -36,8 +36,8 @@ from typing import Dict, List
 
 def main():
     """
-    Main function to retrieve expenses, calculate total, lowest, and highest
-    expenses, and display results in a formatted manner.
+    Entry function for when code is invoked directly. Retrieve expenses,
+    calculate totals, and display results.
     """
     #   Retrieve expenses.
     expenses: List[Dict[str, float]] = get_expenses()
@@ -56,19 +56,16 @@ def main():
     #   Calculate total expenses.
     total: float = get_total(expenses)
 
-    #   Print formatted results
+    #   Display results.
     print(f"\n{'Expense Summary':^36}")
-
     print("\nLowest Expense(s)")
     print("-" * 36)
     for expense in lowest:
         print(f"{expense['type'][:20]:<20} ${expense['amount']:>13,.2f}")
-
     print("\nHighest Expense(s)")
     print("-" * 36)
     for expense in highest:
         print(f"{expense['type'][:20]:<20} ${expense['amount']:>13,.2f}")
-
     print("\nTotal Amount")
     print("-" * 36)
     print(f"{'TOTAL: ':>20} ${total:13,.2f}")
@@ -177,14 +174,15 @@ def get_lowest(expenses: List[Dict[str, float]]) -> List[Dict[str, float]]:
 
         Args:
             expenses (List[Dict[str, float]]): A list of dictionaries where
-                each dictionary contains:
+            each dictionary contains:
                 - "type" (str): The expense type.
                 - "amount" (float): The expense amount.
 
         Returns:
             List[Dict[str, float]]: A list containing all expense(s) with the
-            lowest amount. Returns an empty list if `expenses` is empty.
+            lowest amount. Returns an empty list if expenses is empty.
         """
+    #   If expenses is empty, return an empty list.
     if not expenses:
         return []
 
@@ -214,8 +212,9 @@ def get_highest(expenses: List[Dict[str, float]]) -> List[Dict[str, float]]:
 
     Returns:
         List[Dict[str, float]]: A list containing all expense(s) with the
-        highest amount. Returns an empty list if `expenses` is empty.
+        highest amount. Returns an empty list if expenses is empty.
     """
+    #   If expenses is empty, return an empty list.
     if not expenses:
         return []
 
@@ -239,13 +238,13 @@ def get_total(expenses: List[Dict[str, float]]) -> float:
 
     Args:
         expenses (List[Dict[str, float]]): A list of dictionaries where each
-            dictionary contains:
+        dictionary contains:
             - "type" (str): The expense type.
             - "amount" (float): The expense amount.
 
     Returns:
         float: The sum of all expense amounts. Returns 0.0 if the list is
-            empty.
+        empty.
     """
     #   Sum up the expense amounts.
     total = reduce(lambda subtotal, expense:
