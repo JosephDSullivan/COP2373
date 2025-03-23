@@ -1,12 +1,12 @@
 # Technical Design Document
 
-## Name:
+## Name
 
-**Joseph D Sullivan**
+Joseph D Sullivan
 
-## Date Created:
+## Date Created
 
-**March 21, 2025**
+March 21, 2025
 
 ---
 
@@ -220,7 +220,7 @@ Prompt the user to enter an integer, validate input, and return it.
 
 ---
 
-### get_Float
+### get_float
 
 #### Description
 Prompt the user to enter an float, validate input, and return it.
@@ -273,7 +273,7 @@ Prompt the user to enter an float, validate input, and return it.
 
 ---
 
-## **Logic Flow**
+## Logic Flow
 
 1. `main()`
 1. `StudentScores()`
@@ -289,6 +289,6 @@ Prompt the user to enter an float, validate input, and return it.
 
 ---
 
-## **Repository Link**
+## Repository Link
 
 [GitHub Repository](https://github.com/JosephDSullivan/COP2373/blob/main/src/chapter08/jsulli40_chapter08_assignment01.py)
