@@ -38,60 +38,254 @@ Problem Description
     ***The .csv file for this assignment should also be in your repository.
 """
 
-from typing import Optional
+import csv
+import re
+from dataclasses import dataclass, field
+from typing import List, Pattern, Union
+
+DEFAULT_SCORE: float = 0.0
+"""
+Default exam score if no score is provided.
+"""
+
+MIN_SCORE: float = 0.0
+"""
+Minimum valid exam score.
+"""
+
+MAX_SCORE: float = 120.0
+"""
+Maximum valid exam score.
+"""
+
+DATA_FILE_NAME: str = "grades.csv"
+"""
+CSV file name used to store student grade records.
+"""
+
+
+@dataclass()
+class StudentScore:
+    """
+    Data class representing a single student's exam scores.
+
+    Attributes:
+        first_name (str): The student's first name.
+        last_name (str): The student's last name.
+        exam01 (float): Score for exam 1.
+        exam02 (float): Score for exam 2.
+        exam03 (float): Score for exam 3.
+    """
+    first_name: str
+    last_name: str
+    exam01: float | None = DEFAULT_SCORE
+    exam02: float | None = DEFAULT_SCORE
+    exam03: float | None = DEFAULT_SCORE
+
+    def __post_init__(self):
+        """
+        Validate the student score data.
+        """
+        #   Verify first name and last name are not empty.
+        if not self.first_name:
+            raise ValueError("First name is required and cannot be empty.")
+        if not self.last_name:
+            raise ValueError("Last name is required and cannot be empty.")
+
+        #   Verify all scores are between MIN_SCORE and MAX_SCORE,
+        #   inclusive.
+        for exam in ["exam01", "exam02", "exam03"]:
+            score = getattr(self, exam)
+            if score is None:
+                setattr(self, exam, DEFAULT_SCORE)
+            elif not (MIN_SCORE <= score <= MAX_SCORE):
+                raise ValueError(f"{exam} for {self.first_name} " +
+                                 f"{self.last_name} must be between " +
+                                 f"{MIN_SCORE} and {MAX_SCORE}.")
+
+
+@dataclass()
+class StudentScores:
+    """
+    List of StudentScore, representing all students' scores.
+
+    Attributes:
+        students (List[StudentScore]): A list of StudentScore.
+    """
+    students: List[StudentScore] = field(default_factory=list)
+
+    def add_student(self, student: StudentScore):
+        """
+        Adds a StudentScore to the students list and the CSV data file.
+
+        Args:
+            student (StudentScore): The StudentScore to add.
+
+        Raises:
+            TypeError: If the argument student is not a StudentScore instance.
+        """
+        #   Validate data.
+        if not isinstance(student, StudentScore):
+            raise TypeError(f"Only StudentScore instances can be added " +
+                            f"to StudentScores.")
+
+        #   Add student to students list.
+        self.students.append(student)
+
+        #   Add student to csv data file.
+        with open(file=DATA_FILE_NAME, mode='a', encoding='utf-8',
+                  newline='') as file:
+            writer = csv.writer(file)
+            if file.tell() == 0:
+                head = ["First Name", "Last Name",
+                        "Exam 1", "Exam 2", "Exam 3"]
+                writer.writerow(head)
+            writer.writerow([student.first_name, student.last_name,
+                             student.exam01, student.exam02, student.exam03])
+
+    def display_students(self):
+        """
+        Displays all students' scores in a tabular format.
+        """
+        #   Display all students in tabular format.
+        print(f"\n{'First Name':<30} {'Last Name':<40} " +
+              f"{'Exam 1':>8} {'Exam 2':>8} {'Exam 3':>8}")
+        print("-" * 98)
+        for student in self.students:
+            print(
+                f"{student.first_name:<30.30} {student.last_name:<40.40} " +
+                f"{student.exam01:>8.2f} {student.exam02:>8.2f} " +
+                f"{student.exam03:>8.2f}")
+
+    def load_students(self):
+        """
+        Loads student records from the CSV file into the student list. Warns
+        user if file does not exist.
+        """
+        #   Clear current list before importing.
+        self.students.clear()
+
+        #   Open csv data file and import all rows into self.students. If file
+        #   not found, warn user.
+        try:
+            with open(DATA_FILE_NAME, mode='r', encoding='utf-8',
+                      newline='') as file:
+                reader = csv.DictReader(file)
+                for row in reader:
+                    student_score = StudentScore(
+                        first_name=row['First Name'],
+                        last_name=row['Last Name'],
+                        exam01=float(row['Exam 1']),
+                        exam02=float(row['Exam 2']),
+                        exam03=float(row['Exam 3'])
+                    )
+                    self.students.append(student_score)
+        except FileNotFoundError:
+            print("Warning: No existing data file found.")
 
 
 def main():
-    """"""
-    print(f"\n\n")
-    pass
-
-
-def get_grade():
-    """"""
-    pass
-
-
-def get_grades():
-    """"""
-    pass
-
-
-def show_grades():
-    """"""
-
-
-def add_grades():
-    """"""
-    pass
-
-
-def get_int(prompt: str = "Please enter an integer: ",
-            lbound: Optional[int] = None,
-            ubound: Optional[int] = None,
-            repeat_until_valid: bool = True
-            ) -> Optional[int]:
     """
-    Prompt the user to enter an integer, validate it, and return it.
+    Entry function for when code is invoked directly.
 
-    Args:
-        prompt (str): The message displayed to the user when asking for input.
-            Defaults to "Please enter an integer: ".
-        lbound (int, optional): The lower bound for valid input. Defaults to
-            None, representing no lower bound.
-        ubound (int, optional): The upper bound for valid input. Defaults to
-            None, representing no upper bound.
-        repeat_until_valid (bool): Whether to keep prompting until valid input
-            is received. Defaults to True.
+    Load student scores list, display table, retrieve new student scores,
+    redisplay table, repeat until the user exits, and redisplay table one
+    final time.
+    """
+    #   Load student scores list.
+    students = StudentScores()
+    students.load_students()
+
+    #   Display initial data to user.
+    print(f"\nSTUDENT SCORES (INITIAL)")
+    students.display_students()
+
+    #   Retrieve number of students to add from user.
+    num_student = -1
+    while num_student != 0:
+        num_student = get_int(prompt=f"\nHow many students would you like " +
+                                     f"to add? (Enter 0 to Exit Program)\t",
+                              lbound=0)
+
+        #   Display results one final time and exit program if 0 entered.
+        if num_student == 0:
+            print(f"\nSTUDENT SCORES (FINAL)")
+            students.display_students()
+            return
+
+        #   Loop for each new student: create new student and append it to
+        #   students.
+        for _ in range(num_student):
+            new_student = get_student()
+            students.add_student(new_student)
+
+        #   Display new students list to user.
+        print(f"\nSTUDENT SCORES (AFTER +{num_student} STUDENTS)")
+        students.display_students()
+
+
+def get_student() -> StudentScore:
+    """
+    Retrieves student data from user and create a StudentScore with that data.
 
     Returns:
-        Optional[int]: The validated integer input from the user, or None if
+        StudentScore: A dataclass instance containing the student's data.
+    """
+    #   Regular expression Pattern to verify string is not blank.
+    regex_nonblank = re.compile(r"^.+$")
+
+    #   Prompt user to enter student score data.
+    print(f"Please enter the following details for new student scores:")
+    first_name = get_str(prompt=f"\tFirst Name:\t",
+                         pattern=regex_nonblank)
+    last_name = get_str(prompt=f"\tLast Name:\t",
+                        pattern=regex_nonblank)
+    exam01 = get_float(prompt=f"\tExam 01:\t",
+                       lbound=MIN_SCORE,
+                       ubound=MAX_SCORE)
+    exam02 = get_float(prompt=f"\tExam 02:\t",
+                       lbound=MIN_SCORE,
+                       ubound=MAX_SCORE)
+    exam03 = get_float(prompt=f"\tExam 03:\t",
+                       lbound=MIN_SCORE,
+                       ubound=MAX_SCORE)
+
+    #   Return student score data as StudentScore.
+    return StudentScore(first_name=first_name, last_name=last_name,
+                        exam01=exam01, exam02=exam02, exam03=exam03)
+
+
+def get_int(prompt: str | None = None,
+            lbound: int | None = None,
+            ubound: int | None = None,
+            repeat_until_valid: bool | None = True
+            ) -> int | None:
+    """
+    Prompt the user to enter an integer, validate input, and return it.
+
+    Args:
+        prompt (str | None, optional): The message displayed to the user when
+            asking for input. Defaults to None, which represents no prompt.
+        lbound (int | None, optional): The lower bound (inclusive) for valid
+            input. Defaults to None, which represents no lower bound.
+        ubound (int | None, optional): The upper bound (inclusive) for valid
+            input. Defaults to None, which represents no upper bound.
+        repeat_until_valid (bool | None, optional): Whether to keep prompting
+            until valid input is received. Defaults to True.
+
+    Returns:
+        int | None: The validated integer input from the user, or None if
             repeat_until_valid is False and input is invalid.
     """
-    while True:
-        err_message = None
-        user_input = input(prompt).strip()
 
+    if repeat_until_valid is None:
+        repeat_until_valid = True
+
+    #   Loop until exit.
+    while True:
+        #   Retrieve input from user.
+        user_input = input(prompt or "").strip()
+        #   Validate input.
         if not user_input:
             err_message = f"Input cannot be empty."
         else:
@@ -104,7 +298,7 @@ def get_int(prompt: str = "Please enter an integer: ",
                 elif ubound is not None and user_input_int > ubound:
                     err_message = f"Input must be at most {ubound}."
                 else:
-                    #   Input is valid.
+                    #   Return validated input.
                     return user_input_int
 
             except ValueError:
@@ -118,41 +312,104 @@ def get_int(prompt: str = "Please enter an integer: ",
             return None
 
 
-def get_str(prompt: str = "Please enter a string: ",
-            allow_empty_string: bool = False,
-            repeat_until_valid: bool = True
-            ) -> Optional[str]:
+def get_float(prompt: str | None = None,
+              lbound: float | None = None,
+              ubound: float | None = None,
+              repeat_until_valid: bool | None = True
+              ) -> float | None:
     """
-    Prompt the user to enter a string, validate it, and return it.
+    Prompt the user to enter a float, validate input, and return it.
 
     Args:
-        prompt (str): The message displayed to the user when asking for input.
-            Defaults to "Please enter a string: ".
-        allow_empty_string (bool): Whether empty strings are allowed. Defaults
-            to False.
-        repeat_until_valid (bool, optional): Whether to keep prompting until
-            valid input is received. Defaults to True.
+        prompt (str | None, optional): The message displayed to the user when
+            asking for input. Defaults to None, which represents no prompt.
+        lbound (float | None, optional): The lower bound (inclusive) for valid
+            input. Defaults to None, which represents no lower bound.
+        ubound (float | None, optional): The upper bound (inclusive) for valid
+            input. Defaults to None, which represents no upper bound.
+        repeat_until_valid (bool | None, optional): Whether to keep prompting
+            until valid input is received. Defaults to True.
 
     Returns:
-        Optional[str]: The validated string input from the user, or None if
+        float | None: The validated float input from the user, or None if
             repeat_until_valid is False and input is invalid.
-
-    TODO:
-        Implement RegEx matching for validation. There has to be a cool way to
-        implement accepting any number of regex patterns and only accept
-        strings which match all regex patterns. I don't know how. Yet.
     """
-    while True:
-        user_input = input(prompt).strip()
+    if repeat_until_valid is None:
+        repeat_until_valid = True
 
-        if not user_input and not allow_empty_string:
-            #   Input is invalid.
-            if repeat_until_valid:
-                print(f"Input cannot be empty.")
-                continue
+    #   Loop until exit.
+    while True:
+        #   Retrieve input from user.
+        user_input = input(prompt or "").strip()
+
+        #   Validate input.
+        if not user_input:
+            err_message = f"Input cannot be empty."
+        else:
+            try:
+                user_input_f = float(user_input)
+
+                #   Validate bounds. If out of bounds, warn user and reloop.
+                if lbound is not None and user_input_f < lbound:
+                    err_message = f"Input must be at least {lbound}."
+                elif ubound is not None and user_input_f > ubound:
+                    err_message = f"Input must be at most {ubound}."
+                else:
+                    #   Return validated input.
+                    return user_input_f
+
+            except ValueError:
+                err_message = f"Input must be a float."
+
+        #   Input is invalid.
+        if repeat_until_valid:
+            if err_message:
+                print(err_message)
+        else:
             return None
 
-        #   Input is valid.
+
+def get_str(prompt: str | None = None,
+            pattern: Union[str, Pattern] | None = None,
+            repeat_until_valid: bool | None = True
+            ) -> str | None:
+    """
+    Prompt the user to enter a string, validate input, and return it.
+
+    Args:
+        prompt (str | None, optional): The message displayed to the user when
+            asking for input. Defaults to None, which represents no prompt.
+        pattern (Union[str, Pattern] | None, optional): The regular
+            expression - as a string or a compiled re.Pattern - to validate
+            input. Defaults to None, which represents no validation.
+        repeat_until_valid (bool | None, optional): Whether to keep prompting
+            until valid input is received. Defaults to True.
+
+    Returns:
+        str | None, optional: The validated string input from the user, or
+            None if repeat_until_valid is False and input is invalid.
+    """
+    if repeat_until_valid is None:
+        repeat_until_valid = True
+    if isinstance(pattern, str):
+        pattern = re.compile(pattern)
+
+    #   Loop until exit.
+    while True:
+        #   Retrieve input from user.
+        user_input = input(prompt or "")
+
+        #   Validate input.
+        if pattern:
+            if not pattern.fullmatch(user_input):
+                #   Input is invalid.
+                if repeat_until_valid:
+                    print(f"Invalid input.")
+                    continue
+                else:
+                    return None
+
+        #   Return validated input.
         return user_input
 
 
