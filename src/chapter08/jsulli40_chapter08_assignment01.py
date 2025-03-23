@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-tbd
+This program allows an instructor to store and retrieve student score data.
 
 Author
     Joseph D Sullivan <JSulli40@Student.SCF.edu>

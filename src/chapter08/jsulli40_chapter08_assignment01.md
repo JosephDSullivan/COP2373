@@ -12,18 +12,18 @@
 
 ## Program Description
 
-This program allows an instructor to store and retrieve student score data
+This program allows an instructor to store and retrieve student score data.
 
 ---
 
 ## Constant(s)
 
-| Name             | Type    | Description                                        |
-|------------------|---------|----------------------------------------------------|
-| `DEFAULT_SCORE`  | `float` | Default exam score if no score is provide.         |
-| `MIN_SCORE`      | `float` | Minimum valid exam score.                          |
-| `MAX_SCORE`      | `float` | Maximum valid exam score.                          |
-| `DATA_FILE_NAME` | `str`   | CSV file name used to store student grade records. |
+| Name             | Type    | Description                                        | Value        |
+|------------------|---------|----------------------------------------------------|--------------|
+| `DEFAULT_SCORE`  | `float` | Default exam score if no score is provide.         | 0.0          |
+| `MIN_SCORE`      | `float` | Minimum valid exam score.                          | 0.0          |
+| `MAX_SCORE`      | `float` | Maximum valid exam score.                          | 120.0        |
+| `DATA_FILE_NAME` | `str`   | CSV file name used to store student grade records. | `grades.csv` |
 
 ---
 
@@ -44,26 +44,26 @@ This program allows an instructor to store and retrieve student score data
   | `exam02`     | `float` | Score for exam 2.         |
   | `exam03`     | `float` | Score for exam 3.         |
 
-  - #### Method(s)
+- #### Method(s)
 
-    1. ##### `__post_init__`
+  1. ##### `__post_init__`
 
-        ###### Description
-        Validate the student score data.
+      ###### Description
+      Validate the student score data.
 
-        ###### Parameter(s)
-          | Name   | Type | Description |
-          |--------|------|-------------|
-          | `self` |      |             |
+      ###### Parameter(s)
+        | Name   | Type | Description |
+        |--------|------|-------------|
+        | `self` |      |             |
 
-        ###### Logic
-        1. Verify first name and last name are not empty.
-        1. Verify all scores are between MIN_SCORE and MAX_SCORE, inclusive.
+      ###### Logic
+      1. Verify first name and last name are not empty.
+      1. Verify all scores are between MIN_SCORE and MAX_SCORE, inclusive.
 
-        ###### Return(s)
-        | Type | Description |
-        |------|-------------|
-        | None |             |
+      ###### Return(s)
+      | Type | Description |
+      |------|-------------|
+      | None |             |
 
 ---
 
