@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-tbd
+Program to deal and draw poker hands.
 
 Author
     Joseph D Sullivan <JSulli40@Student.SCF.edu>
