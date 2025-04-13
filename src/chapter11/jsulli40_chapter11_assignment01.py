@@ -150,30 +150,26 @@ class Hand:
         return "\t\t".join(f"{card_num + 1}: {card}"
                            for card_num, card in enumerate(self.cards))
 
-    def draw(self, indices: list[int] = None):
+    def draw(self, indices: list[int]):
         """
         Discard and redraw cards at the specified indices.
 
         Args:
-            indices (list[int], optional): A permutation of 1-based indices of cards to replace.
-                                           If None or empty, nothing is changed.
-
-        Raises:
-            ValueError: If indices are invalid (e.g., duplicates, out-of-range, wrong count).
+            indices (list[int]): A list of 1-based indices of cards to
+                replace.
         """
-        if indices is None:
-            return
-
-        # Validate indices: must be integers in 1..CARDS_PER_HAND with no duplicates
+        #   Validate indices. Must be integers in 1...CARDS_PER_HAND with no
+        #   duplicates.
         if (not all(isinstance(i, int) for i in indices)
                 or sorted(indices) != sorted(set(indices))
                 or not all(1 <= i <= self.CARDS_PER_HAND for i in indices)):
             raise ValueError(
-                f"indices must be unique integers in range [1, {self.CARDS_PER_HAND}]"
+                f"indices must be unique integers in range [1, "
+                f"{self.CARDS_PER_HAND}]"
             )
 
+        #   Discard and draw each indicated index.
         for i in indices:
-            # Convert 1-based to 0-based index
             self.deck.cards_discarded.append(self.cards[i - 1])
             self.cards[i - 1] = self.deck.deal_card()
 
