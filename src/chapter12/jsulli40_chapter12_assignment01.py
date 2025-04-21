@@ -199,7 +199,8 @@ def calculate_pass_fail(exam_data: np.ndarray) -> Tuple[
         exam_data (np.ndarray): Np array of exam scores.
 
     Returns:
-        Tuple: Number of students passing each exam, pass percentage for each exam.
+        Tuple: Number of students passing each exam, pass percentage for each
+        exam.
     """
     pass_fail_counts = np.sum(exam_data >= PASSING_GRADE, axis=0)
     total_students = exam_data.shape[0]
